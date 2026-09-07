@@ -60,13 +60,16 @@ const getChannelStats = AsyncHandler(async (req, res) => {
         totalViews:1,
         totalLikes:1,
         totalVideos:1,
+        username:1,
+        avatar:1,
+        
 
     }
   }
   
 ])
 
-if(!stats) throw new ApiError(404,"no stat found")
+if(stats.length===0) throw new ApiError(404,"no stat found")
 
 return res.
 status(200).
@@ -106,7 +109,7 @@ const getChannelVideos = AsyncHandler(async (req, res) => {
     )
 
 
-if(!allVideos) throw new ApiError(404,"videos not found")
+if(allVideos.length===0) throw new ApiError(404,"videos not found")
 
 
 return res.

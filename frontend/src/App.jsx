@@ -6,6 +6,7 @@ import Register from './pages/Register'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import Video from './pages/Video'
+import Channel from './pages/Channel'
 function App() {
     
 
@@ -22,6 +23,7 @@ function App() {
 <Route path='/' element={<Home/>}/>
 
 <Route path='/videos/:videoId'  element={<Video/>}> </Route>
+<Route path='/channel/:channelId' element={<Channel/>}></Route>
    </Routes>
    </>
    

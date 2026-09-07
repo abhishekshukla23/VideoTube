@@ -1,5 +1,6 @@
 import { useParams, useSearchParams } from "react-router-dom";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import React, { useState,useEffect} from 'react'
 import { useAuth } from '../context/AuthContext';
 const Video = () => {
@@ -236,7 +237,9 @@ if(loading){
       <p>{video.views}</p>
       <p>{video.likesCount}</p>
       <p>Uploaded On:{new Date(video.createdAt).toLocaleDateString()}</p>
-      <p>Channel:{video.owner?.username}</p>
+      <Link to={`/channel/${video.owner._id}`}>
+         {video.owner?.username}
+      </Link>
       <button onClick={handleSubscribe}>
         {
             subscribed?"Unsubsribe":"Subscribe"
