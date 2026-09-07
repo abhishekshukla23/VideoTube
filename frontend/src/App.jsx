@@ -7,6 +7,9 @@ import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import Video from './pages/Video'
 import Channel from './pages/Channel'
+import History from './pages/History'
+import Playlist from './pages/Playlist'
+import PlaylistDetails from './components/PlaylistDetails'
 function App() {
     
 
@@ -24,7 +27,16 @@ function App() {
 
 <Route path='/videos/:videoId'  element={<Video/>}> </Route>
 <Route path='/channel/:channelId' element={<Channel/>}></Route>
+
+<Route path='/history' element={<History/>}></Route>
+
+<Route path='/playlist' element={<Playlist/>}></Route>
+
+<Route path='playlist/:playlistId' element={<PlaylistDetails/>}></Route>
    </Routes>
+
+
+
    </>
    
   )

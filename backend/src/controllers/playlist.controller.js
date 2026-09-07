@@ -30,13 +30,12 @@ const createPlaylist=AsyncHandler(async (req,res)=>{
 
 
 const getUserPlaylists = AsyncHandler(async (req, res) => {
-    const {userId} = req.params
     const playlist=await Playlist.find(
         {
-            owner:userId
+            owner:req.user._id
         }
     )
-    if(!playlist) throw new ApiError(404,"playlist not found")
+    if(playlist.length===0) throw new ApiError(404,"playlist not found")
     
     return res.
     status(200).
@@ -63,7 +62,7 @@ const addVideoToPlaylist = AsyncHandler(async (req, res) => {
         }
 
     )
-
+  if(!playlist) throw new ApiError(404,"playlist not found")
 
     return res.
     status(200).
@@ -77,6 +76,22 @@ const addVideoToPlaylist = AsyncHandler(async (req, res) => {
     
 })
 
+const getPlaylistById=AsyncHandler(async (req,res)=>{
+    const {playlistId}=req.params
+    const playlist=await Playlist.findById(playlistId).populate("videos")
+
+    if(!playlist) throw new ApiError(404,"playlist not found")
+
+    return res
+    .status(200).
+    json(
+        new ApiResponse(
+            200,
+            playlist,
+            "playlist fetched successfully"
+        )
+    )
+})
 
 const removeVideoFromPlaylist = AsyncHandler(async (req, res) => {
     const {playlistId, videoId} = req.params
@@ -160,5 +175,5 @@ export {createPlaylist,
     addVideoToPlaylist,
     removeVideoFromPlaylist,
     deletePlaylist,
-    updatePlaylist
+    updatePlaylist,getPlaylistById
 }

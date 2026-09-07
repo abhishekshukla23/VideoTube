@@ -3,7 +3,12 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import React, { useState,useEffect} from 'react'
 import { useAuth } from '../context/AuthContext';
+
+
+
 const Video = () => {
+
+    const [playlist,setPlaylist]=useState([])
     const {videoId}=useParams();
     const [commentContent,setCommentContent] =useState({
         content:""
@@ -21,6 +26,24 @@ const Video = () => {
 
    const [subscribed,setSubscribed]=useState(false)
 
+   const getPlaylist= async () => {
+     console.log("getPlaylist clicked");
+  try {
+    const response = await axios.get(
+      `http://localhost:8000/api/v2/playlist/getPlaylist/`,
+      {
+        withCredentials: true
+      }
+    );
+
+    setPlaylist(response.data.data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+  
    const handleComment=(e)=>{
     setCommentContent(
         {
@@ -34,7 +57,10 @@ const Video = () => {
    const getVideo=async ()=>{
     try {
          const response = await axios.get(
-                    `http://localhost:8000/api/v2/videos/${videoId}`
+                    `http://localhost:8000/api/v2/videos/${videoId}`,
+                    {
+                        withCredentials:true
+                    }
                 );
 
                 console.log(response.data);
@@ -216,7 +242,21 @@ const handleSubscribe= async ()=>{
 }
 
 
-
+const addtoPlaylist=async (playlistId)=>{
+    try {
+        const response=await axios.patch(
+            `http://localhost:8000/api/v2/playlist/add/${playlistId}/${videoId}`,
+      {},
+      {
+        withCredentials: true
+      }
+        )
+        console.log(response)
+        alert("video added to playlist")
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 
 
@@ -230,7 +270,7 @@ if(loading){
     <div>
         <video
         src={video.videoFile}
-            controls
+             controls
             width="700"
         />
       <h1>{video.title}</h1>
@@ -249,6 +289,24 @@ if(loading){
       <button onClick={handleLike}>
         {like ? "👎 Unlike" : "👍 Like"}
       </button>
+
+      <button onClick={getPlaylist}>
+        Add to Playlist
+      </button>
+      
+      <div>
+        {
+            playlist.map((item)=>(
+                <div key={item._id}>
+                    <p>{item._id}</p>
+                    <p>{item.name}</p>
+                <button onClick={()=>addtoPlaylist(item._id)}>
+                    Add
+                </button>
+                </div>
+            ))
+        }
+      </div>
       
       <h2>Comments</h2>
 
@@ -311,6 +369,8 @@ if(loading){
 })
       }
 
+
+
       <input type="text"  
        placeholder="say something"
        name="content"
@@ -319,6 +379,7 @@ if(loading){
       <button onClick={DoComment}>
         Comment
       </button>
+
     </div>
 
   )

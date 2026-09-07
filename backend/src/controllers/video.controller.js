@@ -122,6 +122,14 @@ const publishAVideo=AsyncHandler(async (req,res)=>{
 
 const getVideoById = AsyncHandler(async (req, res) => {
     const { videoId } = req.params
+    await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $addToSet:{
+                watchHistory:videoId
+            }
+        }
+    )
     const video=await Video.aggregate(
         [
            {
@@ -164,7 +172,8 @@ const getVideoById = AsyncHandler(async (req, res) => {
                 likesCount:1,
                 owner:1,
                 createdAt:1,
-                duration:1
+                duration:1,
+                videoFile:1
 
             }
            }
@@ -258,6 +267,27 @@ const togglePublishStatus = AsyncHandler(async (req, res) => {
 
 })
 
+const removeFromWatchHistory=AsyncHandler(async (req,res)=>{
+    const {videoId}=req.params;
+
+    const video=await User.findByIdAndUpdate(
+        req.user._id,{
+                $pull:{
+                    watchHistory:videoId
+                }
+        }
+    )
+
+    return res.
+    status(200)
+    .json(
+        new ApiResponse(
+            200,
+            null,
+            "video removed from watchHistory"
+        )
+    )
+})
 
 
 
@@ -284,5 +314,6 @@ export {getAllVideos,
     getVideoById,
     updateVideo,
     deleteVideo,
-    togglePublishStatus
+    togglePublishStatus,
+    removeFromWatchHistory
 }

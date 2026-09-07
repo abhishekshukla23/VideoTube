@@ -3,16 +3,21 @@ import { Link } from 'react-router-dom'
 import {useParams} from "react-router-dom"
 import { useState,useEffect } from 'react'
 import axios from 'axios'
+import { useAuth } from '../context/AuthContext'
 const Channel = () => {
-    const {channelId}=useParams()
 
+  const {user}=useAuth()
+    const {channelId}=useParams()
+    const [subscribed,setSubscribed]=useState(false)
     const [stats,setStats]=useState(null)
+
     const [videos,setVideos]=useState([])
     const [loading,setLoading]=useState(true)
 
    useEffect(()=>{
      
          const getChannelData=async ()=>{
+          if(!user) return ;
             try {
                    const ChannelStats=await axios.get(
                  `http://localhost:8000/api/v2/dashboard/channel/${channelId}`,
@@ -27,7 +32,23 @@ const Channel = () => {
             console.log("videos",getVideos.data)
             setStats(ChannelStats.data.data[0])
             setVideos(getVideos.data.data[0].owner)
-            } catch (error) {
+          
+            const subscriptionResponse=await axios.get(
+                 `http://localhost:8000/api/v2/subscription/s/${user._id}`,
+        { withCredentials: true }
+            )
+
+            const subscriptions=subscriptionResponse.data.data;
+           
+            const alreadySubscribed=subscriptions.some(
+              (subs)=>
+                subs.channel.toString()===channelId.toString()
+            )
+
+            setSubscribed(alreadySubscribed)
+
+
+          } catch (error) {
                 console.log(error)
             }
            finally{
@@ -41,12 +62,32 @@ const Channel = () => {
      getChannelData()
    }
 ,
-   [channelId])
+   [channelId,user])
 
 
 if(loading)
 {
     return <h2>Loading Channel...</h2>
+}
+
+const handleSubscribe=async ()=>{
+ try {
+   const response=await axios.post(
+     `http://localhost:8000/api/v2/subscription/s/${channelId}`,
+      {},
+      { withCredentials: true }
+
+  )
+  if(response.data.message=="subscribed"){
+    setSubscribed(true)
+  }
+  else{
+    setSubscribed(false)
+  }
+ } catch (error) {
+  console.log(error)
+ }
+
 }
 
 
@@ -71,6 +112,9 @@ if(loading)
         <h1>{stats?.username}</h1>
 
         <p>{stats?.totalSubscribers} Subscribers</p>
+        <button onClick={handleSubscribe}>
+          {subscribed?"Unsubscribe":"Subscribe"}
+        </button>
       </div>
 
       <div>
