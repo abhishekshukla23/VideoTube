@@ -90,7 +90,24 @@ const Playlist = () => {
     }
 
     
-    
+    const deletePlaylist=async(playlistId)=>{
+      try {
+        const response=await axios.delete(
+          `http://localhost:8000/api/v2/playlist/delete/${playlistId}`,
+          {
+            withCredentials:true
+          }
+        )
+        setPlaylist(
+          prev=>(
+           prev.filter(item=>item._id!==playlistId)
+          )
+        )
+        console.log(response.data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
     
 
 
@@ -134,6 +151,9 @@ const Playlist = () => {
    <h2>{item.name}</h2>
             <p>{item.description}</p>
   </Link>
+  <button onClick={()=>deletePlaylist(item._id)}>
+    Delete
+  </button>
            
            </div>
         ))

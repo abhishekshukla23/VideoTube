@@ -94,6 +94,7 @@ const getPlaylistById=AsyncHandler(async (req,res)=>{
 })
 
 const removeVideoFromPlaylist = AsyncHandler(async (req, res) => {
+    console.log("REMOVE CONTROLLER REACHED");
     const {playlistId, videoId} = req.params
     const playlist=await Playlist.findByIdAndUpdate(
         playlistId,
@@ -105,6 +106,7 @@ const removeVideoFromPlaylist = AsyncHandler(async (req, res) => {
             new:true
         }
     )
+    if(!playlist) throw new ApiError(404,"playlist not found")
     return res.
     status(200).
     json(

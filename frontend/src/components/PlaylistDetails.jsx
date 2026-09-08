@@ -12,7 +12,7 @@ const PlaylistDetails = () => {
         const getPlaylist = async () => {
             try {
                 const response = await axios.get(
-                    `http://localhost:8000/api/v2/playlist/${playlistId}`,
+                    `http://localhost:8000/api/v2/playlist/getPlaylistById/${playlistId}`,
                     {
                         withCredentials: true
                     }
@@ -22,7 +22,9 @@ const PlaylistDetails = () => {
                 setPlaylist(response.data.data);
 
             } catch (error) {
-                console.log(error);
+                  console.log("ERROR:", error);
+    console.log("STATUS:", error.response?.status);
+    console.log("DATA:", error.response?.data);
             } finally {
                 setLoading(false);
             }
@@ -37,6 +39,32 @@ const PlaylistDetails = () => {
 
     if (!playlist) {
         return <div>Playlist not found</div>;
+    }
+
+    const removeVideo=async (playlistId,videoId)=>{
+        try {
+            const response=await axios.patch(
+                          `http://localhost:8000/api/v2/playlist/remove/${playlistId}/${videoId}`,
+                          {},
+                
+                {
+                    withCredentials:true
+                }
+            )
+            console.log(response.data)
+            setPlaylist(
+                prev=>(
+                    {
+                        ...prev,
+                        videos:prev.videos.filter(video=>video._id!==videoId)
+                    }
+                )
+            )
+        } catch (error) {
+            console.log(error
+
+            )
+        }
     }
 
     return (
@@ -57,6 +85,9 @@ const PlaylistDetails = () => {
                         alt={video.title}
                         width="200"
                     />
+                    <button onClick={()=>removeVideo(playlistId,video._id)}>
+                        Remove
+                    </button>
                 </div>
             ))}
         </div>
