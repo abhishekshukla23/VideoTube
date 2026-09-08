@@ -108,6 +108,44 @@ const Playlist = () => {
         console.log(error)
       }
     }
+
+    const editPlaylist=async (item)=>{
+      const name=prompt("Enter new Playlist Name",item.name);
+      const description=prompt(
+        "Enter new Playlist description",
+        item.description
+      )
+
+      if(name===null || description===null){
+        return ;
+      }
+
+      try {
+        const response=await axios.patch(
+             `http://localhost:8000/api/v2/playlist/update/${item._id}`,
+            {
+                name,
+                description
+            },
+            {
+                withCredentials: true
+            }
+        )
+
+        const updatedPlaylist=response.data.data
+
+        setPlaylist(
+          prev=>
+            prev.map(
+              playlist=>
+                playlist._id===item._id ? updatedPlaylist : playlist
+            )
+        )
+      } catch (error) {
+
+        console.log(error)
+      }
+    }
     
 
 
@@ -153,6 +191,10 @@ const Playlist = () => {
   </Link>
   <button onClick={()=>deletePlaylist(item._id)}>
     Delete
+  </button>
+
+  <button onClick={()=>editPlaylist(item)}>
+    Edit
   </button>
            
            </div>
