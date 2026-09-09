@@ -1,4 +1,4 @@
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams,useNavigate} from "react-router-dom";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import React, { useState,useEffect} from 'react'
@@ -6,7 +6,9 @@ import { useAuth } from '../context/AuthContext';
 
 
 
+
 const Video = () => {
+    const navigate=useNavigate()
 
     const [playlist,setPlaylist]=useState([])
     const {videoId}=useParams();
@@ -258,6 +260,22 @@ const addtoPlaylist=async (playlistId)=>{
     }
 }
 
+const removeVideo=async (videoId)=>{
+    try {
+        const response=await axios.delete(
+             `http://localhost:8000/api/v2/videos/deleteVideo/${videoId}`,
+            {
+                withCredentials: true
+            }
+        )
+        const removedVideo=response.data.data;
+        navigate('/')
+    } catch (error) {
+        console.log(error)
+    }
+}
+      const isOwner =
+    user?._id?.toString() === video?.owner?._id?.toString();
 
 
 if(loading){
@@ -285,11 +303,16 @@ if(loading){
             subscribed?"Unsubsribe":"Subscribe"
         }
       </button>
+     {isOwner && (
+    <button onClick={() => removeVideo(video._id)}>
+        Remove
+    </button>
+)}
       <p>{video.description}</p>
       <button onClick={handleLike}>
         {like ? "👎 Unlike" : "👍 Like"}
       </button>
-
+   
       <button onClick={getPlaylist}>
         Add to Playlist
       </button>
