@@ -10,6 +10,7 @@ import Channel from './pages/Channel'
 import History from './pages/History'
 import Playlist from './pages/Playlist'
 import PlaylistDetails from './components/PlaylistDetails'
+import Tweets from './components/Tweets'
 function App() {
     
 
@@ -33,6 +34,8 @@ function App() {
 <Route path='/playlist' element={<Playlist/>}></Route>
 
 <Route path='playlist/:playlistId' element={<PlaylistDetails/>}></Route>
+
+<Route path='/tweets' element={<Tweets/>}></Route>
    </Routes>
 
 

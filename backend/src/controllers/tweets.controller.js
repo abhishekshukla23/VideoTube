@@ -5,11 +5,11 @@ import {ApiResponse} from "../utils/ApiResponse.js"
 import { AsyncHandler } from "../utils/AsyncHandler.js"
 
 const createTweet = AsyncHandler(async (req, res) => {
-    const {userId}=req.params;
     const {content}=req.body;
+    if(!content) throw new ApiError(400,"content is required")
     const tweet=await Tweet.create(
         {
-            owner:userId,
+            owner:req.user._id,
             content:content
         }
     )
@@ -26,13 +26,12 @@ const createTweet = AsyncHandler(async (req, res) => {
 })
 
 const getUserTweets = AsyncHandler(async (req, res) => {
-    const {userId}=req.params;
     const tweet=await Tweet.find(
         {
-            owner:userId
+            owner:req.user._id
         }
     )
-    if(!tweet) throw new ApiError(404,"tweet not found")
+    if(tweet.length===0) throw new ApiError(404,"tweet not found")
 
         return res.
         status(200).
