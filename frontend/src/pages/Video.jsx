@@ -7,8 +7,13 @@ import { useAuth } from '../context/AuthContext';
 
 
 
+
 const Video = () => {
     const navigate=useNavigate()
+    const [editingVideo, setEditingVideo] = useState(false);
+const [editTitle, setEditTitle] = useState("");
+const [editDescription, setEditDescription] = useState("");
+const [editThumbnail, setEditThumbnail] = useState(null);
 
     const [playlist,setPlaylist]=useState([])
     const {videoId}=useParams();
@@ -27,7 +32,7 @@ const Video = () => {
    const[editContent,setEditContent]=useState("")
 
    const [subscribed,setSubscribed]=useState(false)
-
+    
    const getPlaylist= async () => {
      console.log("getPlaylist clicked");
   try {
@@ -283,6 +288,51 @@ if(loading){
 }
 
 
+const editVideoDetails = async () => {
+    try {
+        const formData = new FormData();
+
+        formData.append("title", editTitle);
+        formData.append("description", editDescription);
+
+        if (editThumbnail) {
+            formData.append("thumbnail", editThumbnail);
+        }
+
+        const response = await axios.patch(
+            `http://localhost:8000/api/v2/videos/updateVideo/${videoId}`,
+            formData,
+            {
+                withCredentials: true
+            }
+        );
+
+        console.log(response.data);
+        const updatedVideo=response.data.data;
+        setVideo(
+            prev=>(
+                {
+                    ...prev,
+                    title:updatedVideo.title,
+                    description:updatedVideo.description,
+                    thumbnail:updatedVideo.thumbnail
+                }
+            )
+        )
+        setEditingVideo(false)
+
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+
+
+
+
+
+
+
 
   return (
     <div>
@@ -304,9 +354,58 @@ if(loading){
         }
       </button>
      {isOwner && (
+        <>
+      
     <button onClick={() => removeVideo(video._id)}>
         Remove
+
     </button>
+
+    <button onClick={()=>{
+        setEditingVideo(true)
+        setEditTitle(video.title)
+        setEditDescription(video.description)
+    }}>
+        Edit
+    </button>
+
+    {
+        editingVideo &&(
+            <div>
+                <h3>Edit Video</h3>
+
+
+                <input type="text"
+                  value={editTitle}
+                onChange={(e)=>setEditTitle(e.target.value)}
+                />
+
+                <textarea
+                 value={editDescription}
+                 onChange={(e)=>setEditDescription(e.target.value)}
+                
+                
+                />
+
+                <input type="file" 
+                 accept="image/*"
+                 onChange={(e)=>setEditThumbnail(e.target.files[0])}
+                
+                
+                />
+                <button onClick={editVideoDetails}>
+                      Save Changes
+                </button>
+
+                <button onClick={()=>setEditingVideo(false)}>
+                    Cancel
+                </button>
+            </div>
+        )
+    }
+    
+</>
+    
 )}
       <p>{video.description}</p>
       <button onClick={handleLike}>

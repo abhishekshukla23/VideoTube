@@ -201,12 +201,12 @@ const updateVideo = AsyncHandler(async (req, res) => {
     // console.log("REQ.BODY:", req.body);
     const { videoId } = req.params
     const thumbnailLocalPath=req.file?.path;
-    if(!thumbnailLocalPath) throw new ApiError(402,"cant get the thumbnail")
+    // if(!thumbnailLocalPath) throw new ApiError(402,"cant get the thumbnail")
     const thumbnail=await uploadOnCloudinary(thumbnailLocalPath)
     const video=await Video.findByIdAndUpdate(
         videoId,{
             $set:{
-                thumbnail:thumbnail.url,
+                thumbnail:thumbnail?.url,
                 title:req.body.title,
                 description:req.body.description
             }
@@ -229,6 +229,10 @@ const updateVideo = AsyncHandler(async (req, res) => {
 
 const deleteVideo = AsyncHandler(async (req, res) => {
     const { videoId } = req.params
+       if (video.owner.toString() !== req.user._id.toString()) {
+        throw new ApiError(403, "you are not allowed to delete this video");
+    }
+
     const video=await Video.findByIdAndDelete(videoId);
     if(!video){
         throw new ApiError(404,"video not found")
