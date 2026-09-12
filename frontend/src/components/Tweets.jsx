@@ -7,7 +7,7 @@ const Tweets = () => {
     const [tweets,setTweets]=useState([])
     const [content,setContent]=useState("")
     const [loading,setLoading]=useState(true)
-
+   const [tweetLike,setTweetLike]=useState({})
 
   const createTweet=async ()=>{
     try {
@@ -114,7 +114,26 @@ const Tweets = () => {
         }
     }
 
-
+const handleTweetLike= async (tweetId)=>{
+   try {
+    const response=await axios.post(
+          `http://localhost:8000/api/v2/likes/toggle/t/${tweetId}`,
+          {},
+          {
+            withCredentials:true
+          }
+    )
+    console.log(response.data)
+    setTweetLike(
+        prev=>({
+            ...prev,
+            [tweetId]:!prev[tweetId]
+        })
+    )
+   } catch (error) {
+    console.log(error)
+   }
+}
 
 
 
@@ -153,7 +172,11 @@ const Tweets = () => {
             <button onClick={()=>deleteTweet(tweet)}>
                 Delete
             </button>
+            <button onClick={()=>handleTweetLike(tweet._id)}>
+                {tweetLike[tweet._id]?"Unlike":"Like"}
+            </button>
            </div>
+
         )
     )
        }

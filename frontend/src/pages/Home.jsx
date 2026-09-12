@@ -5,7 +5,7 @@ const Home = () => {
 
     const [videos, setVideos] = useState([]);
     const [loading, setLoading] = useState(true);
-
+const [search,setSearch]=useState("")
     useEffect(() => {
 
         const getVideos = async () => {
@@ -35,10 +35,33 @@ const Home = () => {
     if (loading) {
         return <h2>Loading Videos..</h2>;
     }
-
+ const handleSearch=async ()=>{
+    try {
+          const response=await axios.get(
+              `http://localhost:8000/api/v2/videos?query=${search}`
+          )
+          console.log(response)
+          setVideos(response.data.data)
+    } catch (error) {
+        console.log(error)
+    }
+ }
     return (
         <div>
             <h1>Home</h1>
+
+
+            <input type="text"
+            value={search}
+            onChange={(e)=>setSearch(e.target.value)}
+            placeholder="Search Videos"
+            
+            
+            
+            />
+            <button onClick={handleSearch}>
+                Search
+            </button>
 
             {
                 videos.map((video) => (

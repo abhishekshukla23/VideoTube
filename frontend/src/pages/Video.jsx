@@ -32,6 +32,8 @@ const [editThumbnail, setEditThumbnail] = useState(null);
    const[editContent,setEditContent]=useState("")
 
    const [subscribed,setSubscribed]=useState(false)
+
+   const [likeComment,setLikeComment]=useState({})
     
    const getPlaylist= async () => {
      console.log("getPlaylist clicked");
@@ -326,8 +328,49 @@ const editVideoDetails = async () => {
     }
 };
 
+const togglePublish=async ()=>{
+    try {
+        const response=await axios.patch(
+             `http://localhost:8000/api/v2/videos/togglePublish/${videoId}`,
+            {},
+            {
+                withCredentials: true
+            }
+        )
+        const updateVideo=response.data.data;
+        setVideo(
+            prev=>(
+                {
+                    ...prev,
+                    isPublished:updateVideo.isPublished
+                }
+            )
+        )
+        console.log(response.data.data)
+    } catch (error) {
+        console.log(error)
+    }
+}
 
-
+const handleCommentLike=async (commentId)=>{
+    try {
+        const response=await axios.post(
+             `http://localhost:8000/api/v2/likes/toggle/c/${commentId}`,
+             {},{
+                withCredentials:true
+             }
+        )
+        console.log(response.data)
+     setLikeComment(
+        prev=>({
+            ...prev,
+            [commentId]:!prev[commentId]
+        })
+     )
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 
 
@@ -367,6 +410,9 @@ const editVideoDetails = async () => {
         setEditDescription(video.description)
     }}>
         Edit
+    </button>
+    <button onClick={togglePublish}>
+        {video.isPublished?"unpublish":"publish"}
     </button>
 
     {
@@ -477,6 +523,9 @@ const editVideoDetails = async () => {
 
                     <button onClick={()=>handleCommentDelete(comment._id)}>
                         Delete
+                    </button>
+                    <button onClick={()=>handleCommentLike(comment._id)}>
+                        {likeComment[comment._id]?"Unlike":"Like"}
                     </button>
                     </>
                 )}
