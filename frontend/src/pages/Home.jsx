@@ -47,35 +47,44 @@ const [search,setSearch]=useState("")
     }
  }
     return (
-        <div>
-            <h1>Home</h1>
+      <div className="w-full">
+  <h1 className="text-3xl font-bold mb-6">
+    Home
+  </h1>
 
+  {/* Search */}
+  <div className="flex gap-3 mb-8 max-w-2xl">
+    <input
+      type="text"
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") handleSearch()
+      }}
+      placeholder="Search Videos"
+      className="flex-1 px-5 py-3 rounded-full bg-gray-900 border border-gray-700 text-white placeholder-gray-500 outline-none focus:border-blue-500"
+    />
 
-            <input type="text"
-            value={search}
-            onChange={(e)=>setSearch(e.target.value)}
-            onKeyDown={(e)=>{
-                if(e.key==='Enter') handleSearch()
-            }}
-            placeholder="Search Videos"
-            
-            
-            
-            />
-            <button onClick={handleSearch}>
-                Search
-            </button>
+    <button
+      onClick={handleSearch}
+      className="px-6 py-3 rounded-full bg-blue-600 hover:bg-blue-700 transition font-medium"
+    >
+      Search
+    </button>
+  </div>
 
-            {
-                videos.map((video) => (
-                  <VideoCard
-                  key={video._id}
-                  video={video}
-                  />
-                ))
-            }
-        </div>
-    );
+  {/* Videos */}
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    {videos.map((video) => (
+      <VideoCard
+        key={video._id}
+        video={video}
+      />
+    ))}
+  </div>
+</div>
+    )
 };
+
 
 export default Home;

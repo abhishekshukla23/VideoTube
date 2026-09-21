@@ -142,46 +142,93 @@ const handleTweetLike= async (tweetId)=>{
 
 
   return (
-    <div>
-      <h1>Community</h1>
 
-      <input type="text"
-      value={content}
-      onChange={(e)=>setContent(e.target.value)}
-      placeholder='Whats on your mind'
-       />
+  <div className="w-full max-w-3xl mx-auto">
 
-       <button onClick={createTweet}>
-        Post
-       </button>
+    <h1 className="text-3xl font-bold mb-8">
+      Community
+    </h1>
 
-       <h2>
-        Tweet
-       </h2>
+   
+    <div className="p-5 bg-gray-900 rounded-xl border border-gray-800 mb-8">
 
-       {
-        tweets.map((
-            tweet
-        )=>(
-           <div key={tweet._id}>
-            <p>{tweet.content}</p>
+      <h2 className="text-lg font-semibold mb-4">
+        What's on your mind?
+      </h2>
 
-            <button onClick={()=>updateTweet(tweet)}>
-                Edit
-            </button>
-            <button onClick={()=>deleteTweet(tweet)}>
-                Delete
-            </button>
-            <button onClick={()=>handleTweetLike(tweet._id)}>
-                {tweetLike[tweet._id]?"Unlike":"Like"}
-            </button>
-           </div>
+      <textarea
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+        placeholder="What's on your mind?"
+        rows="4"
+        className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 outline-none focus:border-blue-500 resize-none"
+      />
 
-        )
-    )
-       }
+      <div className="flex justify-end mt-3">
+
+        <button
+          onClick={createTweet}
+          className="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 transition font-medium"
+        >
+          Post
+        </button>
+
+      </div>
+
     </div>
-  )
+
+    
+    <h2 className="text-2xl font-bold mb-5">
+      Tweets
+    </h2>
+
+    <div className="space-y-4">
+
+      {tweets.map((tweet) => (
+
+        <div
+          key={tweet._id}
+          className="p-5 bg-gray-900 rounded-xl border border-gray-800"
+        >
+
+          <p className="text-gray-200 text-lg whitespace-pre-wrap">
+            {tweet.content}
+          </p>
+
+          <div className="flex gap-3 mt-5">
+
+            <button
+              onClick={() => updateTweet(tweet)}
+              className="px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition text-sm"
+            >
+              Edit
+            </button>
+
+            <button
+              onClick={() => deleteTweet(tweet)}
+              className="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 transition text-sm"
+            >
+              Delete
+            </button>
+
+            <button
+              onClick={() => handleTweetLike(tweet._id)}
+              className="px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition text-sm"
+            >
+              {tweetLike[tweet._id] ? "Unlike" : "Like"}
+            </button>
+
+          </div>
+
+        </div>
+
+      ))}
+
+    </div>
+
+  </div>
+)
+  
 }
 
 export default Tweets

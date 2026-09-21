@@ -161,51 +161,97 @@ const Playlist = () => {
 
 
   return (
-    <div>
-      <input type="text" 
-      name="name" 
-      value={createPlaylist.name}
-       onChange={handleInput}
+    <div className="w-full">
+
+  <h1 className="text-3xl font-bold mb-8">
+    Playlists
+  </h1>
+
+  {/* Create Playlist */}
+  <div className="max-w-2xl p-6 bg-gray-900 rounded-xl border border-gray-800 mb-10">
+
+    <h2 className="text-xl font-semibold mb-5">
+      Create New Playlist
+    </h2>
+
+    <div className="space-y-4">
+
+      <input
+        type="text"
+        name="name"
+        value={createPlaylist.name}
+        onChange={handleInput}
+        placeholder="Playlist name"
+        className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 outline-none focus:border-blue-500"
       />
 
-      <input type="text" 
-       name="description"
-       value={createPlaylist.description}
-      onChange={handleInput}
-      
-
+      <input
+        type="text"
+        name="description"
+        value={createPlaylist.description}
+        onChange={handleInput}
+        placeholder="Playlist description"
+        className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 outline-none focus:border-blue-500"
       />
 
-      <button onClick={formPlaylist}>
+      <button
+        onClick={formPlaylist}
+        className="px-5 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 transition font-medium"
+      >
         Create Playlist
       </button>
 
-
-  <h1>Created Playlists</h1>
-      <div>
-      {
-        playlist.map((item)=>(
-           <div key={item._id}>
-  <Link to={`/playlist/${item._id}`}>
-   <h2>{item.name}</h2>
-            <p>{item.description}</p>
-  </Link>
-  <button onClick={()=>deletePlaylist(item._id)}>
-    Delete
-  </button>
-
-  <button onClick={()=>editPlaylist(item)}>
-    Edit
-  </button>
-           
-           </div>
-        ))
-      }
-
-      </div>
     </div>
 
-    
+  </div>
+
+  {/* Created Playlists */}
+  <h2 className="text-2xl font-bold mb-5">
+    Created Playlists
+  </h2>
+
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+
+    {playlist.map((item) => (
+      <div
+        key={item._id}
+        className="p-5 bg-gray-900 rounded-xl border border-gray-800 hover:border-gray-600 transition"
+      >
+
+        <Link to={`/playlist/${item._id}`}>
+          <h2 className="text-xl font-semibold hover:text-blue-400 transition">
+            {item.name}
+          </h2>
+
+          <p className="text-gray-400 mt-2 line-clamp-2">
+            {item.description}
+          </p>
+        </Link>
+
+        <div className="flex gap-3 mt-5">
+
+          <button
+            onClick={() => editPlaylist(item)}
+            className="flex-1 px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition"
+          >
+            Edit
+          </button>
+
+          <button
+            onClick={() => deletePlaylist(item._id)}
+            className="flex-1 px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 transition"
+          >
+            Delete
+          </button>
+
+        </div>
+
+      </div>
+    ))}
+
+  </div>
+
+</div>
   )
 }
 

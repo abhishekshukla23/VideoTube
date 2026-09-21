@@ -39,49 +39,73 @@ const publishVideo = async () => {
 
 
   return (
-    <div>
-      <h1>
-        Publish Video
-      </h1>
+  <div className="w-full max-w-2xl mx-auto">
+    <h1 className="text-3xl font-bold mb-8">Publish Video</h1>
 
-       <input
-                type="text"
-                placeholder="Video title"
-                value={title}
-                onChange={(e)=>setTitle(e.target.value)}
-            />
+    <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+      <div className="space-y-6">
 
-            <br />
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            Video Title
+          </label>
+          <input
+            type="text"
+            placeholder="Enter video title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-500 outline-none focus:border-blue-500"
+          />
+        </div>
 
-            <textarea
-                placeholder="Video description"
-                value={description}
-                onChange={(e)=>setDescription(e.target.value)}
-            />
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            Description
+          </label>
+          <textarea
+            placeholder="Enter video description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            rows="6"
+            className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-500 outline-none focus:border-blue-500 resize-none"
+          />
+        </div>
 
-            <br />
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            Video
+          </label>
+          <input
+            type="file"
+            accept="video/*"
+            onChange={(e) => setVideoFile(e.target.files[0])}
+            className="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-gray-700 file:text-white hover:file:bg-gray-600"
+          />
+        </div>
 
-            <label>Video:</label>
-            <input type="file"
-            accept='video/*'
-            onChange={(e)=>setVideoFile(e.target.files[0])}
-            />
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">
+            Thumbnail
+          </label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setThumbnail(e.target.files[0])}
+            className="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-gray-700 file:text-white hover:file:bg-gray-600"
+          />
+        </div>
 
-            <br />
+        <button
+          onClick={publishVideo}
+          className="w-full py-3 rounded-lg bg-blue-600 hover:bg-blue-700 transition font-semibold text-white"
+        >
+          Publish Video
+        </button>
 
-            <label>Thumbnail:</label>
-            <input type="file" 
-            accept='image/*'
-            onChange={(e)=>setThumbnail(e.target.files[0])}
-            
-            />
-
-            <br />
-
-            <button onClick={publishVideo}>Publish</button>
-
+      </div>
     </div>
-  )
+  </div>
+)
 }
 
 export default PublishVideo

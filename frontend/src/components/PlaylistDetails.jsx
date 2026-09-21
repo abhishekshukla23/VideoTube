@@ -68,29 +68,81 @@ const PlaylistDetails = () => {
     }
 
     return (
-        <div>
-            <h1>{playlist.name}</h1>
-            <p>{playlist.description}</p>
+       <div className="w-full">
 
-            <h2>Videos</h2>
+  {/* Playlist header */}
+  <div className="mb-8 p-6 bg-gray-900 rounded-xl border border-gray-800">
 
-            {playlist.videos?.map((video) => (
-                <div key={video._id}>
-                    <Link to={`/video/${video._id}`}>
-                        <h3>{video.title}</h3>
-                    </Link>
+    <h1 className="text-3xl font-bold">
+      {playlist.name}
+    </h1>
 
-                    <img
-                        src={video.thumbnail}
-                        alt={video.title}
-                        width="200"
-                    />
-                    <button onClick={()=>removeVideo(playlistId,video._id)}>
-                        Remove
-                    </button>
-                </div>
-            ))}
+    <p className="text-gray-400 mt-2">
+      {playlist.description}
+    </p>
+
+  </div>
+
+  {/* Videos */}
+  <h2 className="text-2xl font-bold mb-5">
+    Videos
+  </h2>
+
+  {playlist.videos?.length === 0 ? (
+    <div className="p-8 bg-gray-900 rounded-xl border border-gray-800 text-center">
+      <p className="text-gray-400">
+        No videos in this playlist
+      </p>
+    </div>
+  ) : (
+
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+
+      {playlist.videos?.map((video) => (
+
+        <div
+          key={video._id}
+          className="bg-gray-900 rounded-xl overflow-hidden border border-gray-800 hover:border-gray-600 transition"
+        >
+
+          <Link to={`/videos/${video._id}`}>
+
+            <img
+              src={video.thumbnail}
+              alt={video.title}
+              className="w-full aspect-video object-cover"
+            />
+
+            <div className="p-4">
+
+              <h3 className="font-semibold text-lg line-clamp-2 hover:text-blue-400 transition">
+                {video.title}
+              </h3>
+
+            </div>
+
+          </Link>
+
+          <div className="px-4 pb-4">
+
+            <button
+              onClick={() => removeVideo(playlistId, video._id)}
+              className="w-full py-2 rounded-lg bg-gray-800 hover:bg-red-600 transition"
+            >
+              Remove
+            </button>
+
+          </div>
+
         </div>
+
+      ))}
+
+    </div>
+
+  )}
+
+</div>
     );
 };
 

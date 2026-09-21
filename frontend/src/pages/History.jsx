@@ -58,41 +58,74 @@ const removeVideo=async (video_id)=>{
 
 
   return (
-    <div>
+  
+  <div className="w-full">
 
-     <h1>Watch History</h1>
+    <h1 className="text-3xl font-bold mb-8">
+      Watch History
+    </h1>
 
-     {
-        history.length===0?(
-            <p>No watch history</p>
-        ):(
-            history.map((video)=>(
-                <div
-                key={video._id}
-                >
-                <Link to={`/video/${video._id}`}>
-                <img src={video.thumbnail} alt={video.title}  width="250"/>
-                
-                             <h3>
-                                {video.title}
-                             </h3>
-                </Link>
-                            <p>{video.views} views</p>
-               <p>{video.owner?.username}</p>
+    {history.length === 0 ? (
+      <div className="p-8 rounded-xl bg-gray-900 border border-gray-800 text-center">
+        <p className="text-gray-400">
+          No watch history
+        </p>
+      </div>
+    ) : (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 
-               <button onClick={()=>{
-                removeVideo(video._id)
-               }}>
-                Remove
-               </button>
-                </div>
-            ))
-        )
-     }
-      
-     
-    </div>
-  )
+        {history.map((video) => (
+          <div
+            key={video._id}
+            className="bg-gray-900 rounded-xl overflow-hidden border border-gray-800 hover:border-gray-600 transition"
+          >
+
+            <Link to={`/videos/${video._id}`}>
+
+              <img
+                src={video.thumbnail}
+                alt={video.title}
+                className="w-full aspect-video object-cover"
+              />
+
+              <div className="p-4">
+
+                <h3 className="font-semibold text-lg line-clamp-2">
+                  {video.title}
+                </h3>
+
+                <p className="text-sm text-gray-400 mt-2">
+                  {video.owner?.username}
+                </p>
+
+                <p className="text-sm text-gray-500 mt-1">
+                  {video.views} views
+                </p>
+
+              </div>
+
+            </Link>
+
+            <div className="px-4 pb-4">
+
+              <button
+                onClick={() => removeVideo(video._id)}
+                className="w-full py-2 rounded-lg bg-gray-800 hover:bg-red-600 transition text-sm"
+              >
+                Remove from History
+              </button>
+
+            </div>
+
+          </div>
+        ))}
+
+      </div>
+    )}
+
+  </div>
+)
+
 }
 
 export default History

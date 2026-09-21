@@ -99,60 +99,102 @@ const handleSubscribe=async ()=>{
 
 
   return (
-    <div>
-      <div>
+  <div className="w-full max-w-6xl mx-auto">
 
-        <img src={stats?.avatar}
-        alt={stats?.username}
-        width="100"
-        height="100"
-        
+    {/* Channel Header */}
+    <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 mb-8">
+      <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5">
+
+        <img
+          src={stats?.avatar}
+          alt={stats?.username}
+          className="w-24 h-24 rounded-full object-cover"
         />
 
-        <h1>{stats?.username}</h1>
+        <div className="flex-1 text-center sm:text-left">
+          <h1 className="text-3xl font-bold">
+            {stats?.username}
+          </h1>
 
-        <p>{stats?.totalSubscribers} Subscribers</p>
-        <button onClick={handleSubscribe}>
-          {subscribed?"Unsubscribe":"Subscribe"}
-        </button>
+          <p className="text-gray-400 mt-2">
+            {stats?.totalSubscribers} Subscribers
+          </p>
+
+          <button
+            onClick={handleSubscribe}
+            className="mt-4 px-6 py-2 rounded-full bg-white text-black font-semibold hover:bg-gray-200 transition"
+          >
+            {subscribed ? "Unsubscribe" : "Subscribe"}
+          </button>
+        </div>
+
       </div>
-
-      <div>
-        <p>{stats?.totalVideos} Videos</p>
-        <p>{stats?.totalViews} Views</p>
-
-        <p>{stats?.totalLikes} Likes</p>
-
-
-      </div>
-
-      <h2>Videos</h2>
-
-      {
-        videos.map((video)=>(
-            <div
-            
-            key={video._id}
-            >
-             <Link to={`/videos/${video._id}`}>
-              <img
-               src={video.thumbnail}
-                alt={video.title}
-                width="250"
-              
-                />
-
-                <h3>{video.title}</h3>
-                <p>{video.views}</p>
-
-             </Link>
-            </div>
-        )
-
-        )
-      }
     </div>
-  )
+
+    {/* Channel Stats */}
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-10">
+
+      <div className="p-5 bg-gray-900 border border-gray-800 rounded-xl">
+        <p className="text-gray-400">Videos</p>
+        <p className="text-3xl font-bold mt-2">
+          {stats?.totalVideos}
+        </p>
+      </div>
+
+      <div className="p-5 bg-gray-900 border border-gray-800 rounded-xl">
+        <p className="text-gray-400">Views</p>
+        <p className="text-3xl font-bold mt-2">
+          {stats?.totalViews}
+        </p>
+      </div>
+
+      <div className="p-5 bg-gray-900 border border-gray-800 rounded-xl">
+        <p className="text-gray-400">Likes</p>
+        <p className="text-3xl font-bold mt-2">
+          {stats?.totalLikes}
+        </p>
+      </div>
+
+    </div>
+
+    {/* Videos */}
+    <h2 className="text-2xl font-bold mb-5">
+      Videos
+    </h2>
+
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+
+      {videos.map((video) => (
+        <div
+          key={video._id}
+          className="bg-gray-900 rounded-xl overflow-hidden border border-gray-800 hover:border-gray-600 transition"
+        >
+          <Link to={`/videos/${video._id}`}>
+
+            <img
+              src={video.thumbnail}
+              alt={video.title}
+              className="w-full aspect-video object-cover"
+            />
+
+            <div className="p-4">
+              <h3 className="font-semibold text-lg line-clamp-2 hover:text-blue-400 transition">
+                {video.title}
+              </h3>
+
+              <p className="text-sm text-gray-500 mt-2">
+                {video.views} views
+              </p>
+            </div>
+
+          </Link>
+        </div>
+      ))}
+
+    </div>
+
+  </div>
+)
 }
 
 export default Channel

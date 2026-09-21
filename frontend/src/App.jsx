@@ -13,15 +13,25 @@ import PlaylistDetails from './components/PlaylistDetails'
 import Tweets from './components/Tweets'
 import PublishVideo from './pages/PublishVideo'
 import Dashboard from './pages/Dashboard'
+import Account from './pages/Account'
+import Sidebar from './components/Sidebar'
 function App() {
     
 
   return (
-<>
+    
+<div className="min-h-screen bg-gray-950 text-white">
+   <Navbar />
 
-  <Navbar/>
 
-   <Routes>
+
+<div className="flex">
+    <Sidebar />
+
+
+
+<main className="flex-1 p-6">
+<Routes>
 <Route path='/login' element={<Login/>}/>
 
 <Route path='/register' element={<Register/>}/>
@@ -41,11 +51,14 @@ function App() {
 
 <Route path='/publish' element={<PublishVideo/>}></Route>
 <Route  path='/dashboard' element={<Dashboard/>}></Route>
+<Route path='/account' element={<Account/>}></Route>
    </Routes>
 
+    </main>
+   
+</div>
 
-
-   </>
+  </div>
    
   )
 }
