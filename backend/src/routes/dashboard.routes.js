@@ -10,8 +10,8 @@ import {
 
 const router=Router()
 
-router.route('/channel/:channelId').get(verifyJWT,getChannelStats)
-router.route('/channel/videos/:channelId').get(verifyJWT,getChannelVideos)
+router.route('/stats/channel/:channelId').get(verifyJWT,getChannelStats)
+router.route('/stats/channel/videos/:channelId').get(verifyJWT,getChannelVideos)
 
 
 

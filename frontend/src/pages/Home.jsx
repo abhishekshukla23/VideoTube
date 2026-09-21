@@ -54,6 +54,9 @@ const [search,setSearch]=useState("")
             <input type="text"
             value={search}
             onChange={(e)=>setSearch(e.target.value)}
+            onKeyDown={(e)=>{
+                if(e.key==='Enter') handleSearch()
+            }}
             placeholder="Search Videos"
             
             

@@ -12,6 +12,7 @@ import Playlist from './pages/Playlist'
 import PlaylistDetails from './components/PlaylistDetails'
 import Tweets from './components/Tweets'
 import PublishVideo from './pages/PublishVideo'
+import Dashboard from './pages/Dashboard'
 function App() {
     
 
@@ -39,6 +40,7 @@ function App() {
 <Route path='/tweets' element={<Tweets/>}></Route>
 
 <Route path='/publish' element={<PublishVideo/>}></Route>
+<Route  path='/dashboard' element={<Dashboard/>}></Route>
    </Routes>
 
 
